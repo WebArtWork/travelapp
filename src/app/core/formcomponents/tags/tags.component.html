@@ -1,0 +1,15 @@
+<div>
+	<winput
+		[placeholder]="field.Placeholder"
+		(wSubmit)="addTag()"
+		[label]="field.Label"
+		#inputRef
+	></winput>
+	<ng-container *ngFor="let tag of tags; index as i">
+		<span>{{tag}}</span>
+		<i (click)="tags.splice(i, 1)">X</i>
+	</ng-container>
+	<wbutton [disabled]="!inputRef.formControl.value" (click)="addTag()">
+		{{field.Button || 'Add'}}
+	</wbutton>
+</div>
