@@ -1,4 +1,5 @@
 export const environment = {
 	production: true,
-	url: 'https://webart.work'
+	url: 'https://webart.work',
+	roles: ['admin', 'driver']
 };

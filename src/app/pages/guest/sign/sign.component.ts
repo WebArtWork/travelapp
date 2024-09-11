@@ -92,8 +92,8 @@ export class SignComponent {
 	});
 
 	user = {
-		email: 'ceo@webart.work',
-		password: 'asdasdasdasd'
+		email: location.hostname === 'localhost' ? 'ceo@webart.work' : '',
+		password: location.hostname === 'localhost' ? 'asdasdasdasd' : ''
 	};
 
 	constructor(
