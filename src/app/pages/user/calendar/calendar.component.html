@@ -1,17 +1,35 @@
-<div>
-	<wbutton (click)="setNow()">Today</wbutton>
-	<i (click)="previousMonth()"><</i>
-	<i (click)="nextMonth()">></i>
-	<span>{{monthTitle[currentMonth]}}</span>
-	<span>{{currentYear}}</span>
+<div class="calendar-nav">
+	<div class="calendar-nav__today">
+		<wbutton (click)="setNow()">Today</wbutton>
+	</div>
+	<div class="calendar-nav-year">
+		<div class="calendar-nav-year__buttons">
+			<i (click)="previousMonth()" class="material-icons arrow-back">
+				<svg width="34" height="34" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<path d="M8.94961 2.7043L8.89219 2.75352L4.61289 6.47227C4.46797 6.59805 4.37773 6.78672 4.37773 6.99727C4.37773 7.20781 4.4707 7.39648 4.61289 7.52227L8.88398 11.2383L8.95508 11.3012C9.02344 11.3477 9.10547 11.375 9.19297 11.375C9.43086 11.375 9.625 11.1727 9.625 10.9211L9.625 3.07891C9.625 2.82734 9.43086 2.625 9.19297 2.625C9.10273 2.625 9.01797 2.65508 8.94961 2.7043Z" fill="black"/>
+				</svg>
+			</i>
+			<div class="calendar-nav-year__data">
+				<span>{{monthTitle[currentMonth]}}</span>
+				<span>{{currentYear}}</span>
+			</div>
+			<i (click)="nextMonth()" class="material-icons arrow-next">
+				<svg width="34" height="34" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<path d="M5.05039 11.2957L5.10781 11.2465L9.38711 7.52773C9.53203 7.40195 9.62227 7.21328 9.62227 7.00273C9.62227 6.79219 9.5293 6.60352 9.38711 6.47773L5.11602 2.76172L5.04492 2.69883C4.97656 2.65234 4.89453 2.625 4.80703 2.625C4.56914 2.625 4.375 2.82734 4.375 3.07891V10.9211C4.375 11.1727 4.56914 11.375 4.80703 11.375C4.89727 11.375 4.98203 11.3449 5.05039 11.2957Z" fill="black"/>
+				</svg>					
+			</i>
+		</div>
+	</div>
+	
+	
 </div>
 
-<div>
-	<div *ngFor="let week of weeksInMonth; index as i">
-		<span>{{week}}</span>
-		<span *ngFor="let day of [1, 2, 3, 4, 5, 6, 7]">
+<div class="calendar">
+	<div *ngFor="let week of weeksInMonth; index as i" class="calendar__row">
+		<span class="calendar__week">{{week}}</span>
+		<span class="calendar__day" *ngFor="let day of [1, 2, 3, 4, 5, 6, 7]">
 			<span *ngIf="!i">{{dayTitle[day]}}</span>
-			<span> | {{day}}</span>
+			<span>{{day}}</span>
 		</span>
 	</div>
 </div>

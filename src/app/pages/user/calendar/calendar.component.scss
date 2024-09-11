@@ -1,0 +1,75 @@
+.calendar{
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    height: 100vh; /* 100% высоты экрана */
+    &__row{
+        flex: 1; /* Каждый ряд занимает равную высоту */
+        display: flex;
+        position: relative;
+    }
+    &__day{
+        flex: 1;
+        background: var(--c-calendar);
+        margin: 4px;
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+        font-weight: 900;
+    }
+    &__week{
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        background: #625959;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 5px;
+        color: #fff;
+        top: -10px;
+        left: -10px;
+    }
+}
+.calendar-nav{
+    display: flex;
+    align-items: center;
+    &-year{
+        display: flex;
+        align-items: center;
+        &__buttons{
+            display: flex;
+            align-items: center;
+            width: 250px;
+            justify-content: space-between;
+            .arrow-back{
+                cursor: pointer;
+                svg{
+                    path{
+                        fill: var(--c-primary);
+                    }
+                }
+            }
+            .arrow-next{
+                cursor: pointer;
+                svg{
+                    path{
+                        fill: var(--c-primary);
+                    }
+                }
+            }
+        }
+        &__data{
+            margin: 0 15px;
+            font-size: 20px;
+            span{
+                &:last-child{
+                    margin-left: 10px;
+                }
+            }
+        }
+    }
+    &__today{
+        margin-right: 20px;
+    }
+}
