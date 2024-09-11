@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
+import {
+	Travelappointment,
+	TravelappointmentService
+} from '../../../core/services/travelappointment.service';
 
 @Component({
 	templateUrl: './calendar.component.html',
 	styleUrls: ['./calendar.component.scss']
 })
 export class CalendarComponent {
-	constructor() {
-		this._onMonthChange();
-	}
 	readonly dayTitle: Record<number, string> = {
 		1: 'ПН',
 		2: 'ВТ',
@@ -31,8 +32,28 @@ export class CalendarComponent {
 		10: 'Листопад',
 		11: 'Грудень'
 	};
+	constructor(private _tas: TravelappointmentService) {
+		this._onMonthChange();
+	}
+	// Appointment management
+	tad = this._tas.travelappointmentsByDate; // object with array's of appointments
+	createAppointment(date: string): void {
+		console.log('createAppointment', date, {
+			year: Number(date.split('.')[0]),
+			month: Number(date.split('.')[1]),
+			day: Number(date.split('.')[2])
+		});
+	}
+	updateAppointment(appointment: Travelappointment): void {
+		console.log('updateAppointment');
+	}
+	// Calendar management
 	currentMonth = new Date().getMonth();
 	currentYear = new Date().getFullYear();
+	previousMonth: number;
+	previousYear: number;
+	nextMonth: number;
+	nextYear: number;
 	setNow(): void {
 		this.currentMonth = new Date().getMonth();
 
@@ -40,7 +61,7 @@ export class CalendarComponent {
 
 		this._onMonthChange();
 	}
-	previousMonth(): void {
+	setPreviousMonth(): void {
 		this.currentMonth--;
 		if (this.currentMonth === -1) {
 			this.currentMonth = 11;
@@ -50,7 +71,7 @@ export class CalendarComponent {
 
 		this._onMonthChange();
 	}
-	nextMonth(): void {
+	setNextMonth(): void {
 		this.currentMonth++;
 		if (this.currentMonth === 12) {
 			this.currentMonth = 0;
@@ -61,18 +82,59 @@ export class CalendarComponent {
 		this._onMonthChange();
 	}
 	weeksInMonth: number[] = [];
+	startDay = 0; // date of previous month, first in first row, -1
+	skipDays = 0; // skipped days on first row
+	keepDays = 0; // days on latest row
 	private _onMonthChange() {
+		if (this.currentMonth === 11) {
+			this.previousMonth = 10;
+			this.previousYear = this.currentYear;
+			this.nextMonth = 0;
+			this.nextYear = this.currentYear + 1;
+		} else if (this.currentMonth === 0) {
+			this.previousMonth = 11;
+			this.previousYear = this.currentYear - 1;
+			this.nextMonth = 1;
+			this.nextYear = this.currentYear;
+		} else {
+			this.previousMonth = this.currentMonth - 1;
+			this.previousYear = this.currentYear;
+			this.nextMonth = this.currentMonth + 1;
+			this.nextYear = this.currentYear;
+		}
+
 		const firstDayOfMonth = new Date(
 			this.currentYear,
 			this.currentMonth,
 			1
 		);
+
 		const firstWeek = this.getWeekNumber(firstDayOfMonth);
+
 		this.weeksInMonth = [];
+
 		const weeks = this.getWeeksInMonth(this.currentMonth, this.currentYear);
+
 		for (let i = 0; i < weeks; i++) {
 			this.weeksInMonth.push(firstWeek + i);
 		}
+
+		this.skipDays =
+			(firstDayOfMonth.getDay() === 0 ? 7 : firstDayOfMonth.getDay()) - 1;
+
+		const daysInPreviousMonth =
+			this.currentMonth > 1
+				? this.getDaysInMonth(this.currentMonth - 1, this.currentYear)
+				: this.getDaysInMonth(11, this.currentYear - 1);
+
+		const daysInMonth = this.getDaysInMonth(
+			this.currentMonth,
+			this.currentYear
+		);
+
+		this.startDay = daysInPreviousMonth - this.skipDays;
+
+		this.keepDays = (daysInMonth + this.skipDays) % 7;
 	}
 
 	/* move to wacom */
@@ -98,5 +160,8 @@ export class CalendarComponent {
 			lastWeek = this.getWeekNumber(new Date(year, 11, 31)); // Get week of the last day of the year
 		}
 		return lastWeek - firstWeek + 1;
+	}
+	getDaysInMonth(month: number, year: number): number {
+		return new Date(year, month + 1, 0).getDate();
 	}
 }
