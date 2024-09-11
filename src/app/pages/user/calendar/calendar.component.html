@@ -1,0 +1,17 @@
+<div>
+	<wbutton (click)="setNow()">Today</wbutton>
+	<i (click)="previousMonth()"><</i>
+	<i (click)="nextMonth()">></i>
+	<span>{{monthTitle[currentMonth]}}</span>
+	<span>{{currentYear}}</span>
+</div>
+
+<div>
+	<div *ngFor="let week of weeksInMonth; index as i">
+		<span>{{week}}</span>
+		<span *ngFor="let day of [1, 2, 3, 4, 5, 6, 7]">
+			<span *ngIf="!i">{{dayTitle[day]}}</span>
+			<span> | {{day}}</span>
+		</span>
+	</div>
+</div>

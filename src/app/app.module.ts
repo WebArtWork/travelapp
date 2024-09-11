@@ -52,6 +52,16 @@ const routes: Routes = [
 		children: [
 			/* user */
 			{
+				path: 'calendar',
+				canActivate: [MetaGuard],
+				data: {
+					meta: {
+						title: 'Calendar'
+					}
+				},
+				loadChildren: () => import('./pages/user/calendar/calendar.module').then(m => m.CalendarModule)
+			}, 
+			{
 				path: 'profile',
 				canActivate: [MetaGuard],
 				data: {
