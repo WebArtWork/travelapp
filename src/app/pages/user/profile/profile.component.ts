@@ -24,7 +24,7 @@ export class ProfileComponent {
 		private _core: CoreService,
 		public us: UserService
 	) {
-		this._core.next('us.user', () => {
+		this._core.onComplete('us.user').then(() => {
 			const user = {};
 
 			this._core.copy(this.us.user, user);

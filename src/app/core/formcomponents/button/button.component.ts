@@ -5,11 +5,6 @@ import { Component } from '@angular/core';
 	styleUrls: ['./button.component.scss']
 })
 export class ButtonComponent {
-	get disableSubmit(): boolean {
-		return typeof this.field.Submit === 'boolean'
-			? !this.field.Submit
-			: true;
-	}
 	field: any = {};
 	click() {
 		if (typeof this.field.Click === 'function') {

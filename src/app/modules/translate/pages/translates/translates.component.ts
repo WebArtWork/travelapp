@@ -21,7 +21,6 @@ interface TranslateAll {
 })
 export class TranslatesComponent {
 	columns = ['page', 'word', 'translation'];
-
 	form: FormInterface = this._form.getForm('translate', {
 		formId: 'translate',
 		title: 'Translate',
@@ -38,12 +37,15 @@ export class TranslatesComponent {
 					{
 						name: 'Label',
 						value: 'Translate'
+					},
+					{
+						name: 'Textarea',
+						value: true
 					}
 				]
 			}
 		]
 	});
-
 	formAll: FormInterface = this._form.getForm('translateAll', {
 		formId: 'translateAll',
 		title: 'Translate All',
@@ -59,6 +61,10 @@ export class TranslatesComponent {
 					{
 						name: 'Label',
 						value: 'Translate'
+					},
+					{
+						name: 'Textarea',
+						value: true
 					}
 				]
 			},
@@ -74,21 +80,16 @@ export class TranslatesComponent {
 					{
 						name: 'Label',
 						value: 'Translate'
+					},
+					{
+						name: 'Textarea',
+						value: true
 					}
 				]
 			}
 		]
 	});
-
 	config = {
-		// buttons: [
-		// 	{
-		// 		icon: 'translate',
-		// 		click: (element: Translate) => {
-		// 			console.log(element);
-		// 		}
-		// 	}
-		// ],
 		update: (doc: Translate) => {
 			this._form
 				.modal<Translate>(this.form, [], {
@@ -96,6 +97,7 @@ export class TranslatesComponent {
 				})
 				.then((updated: Translate) => {
 					this._http.post('/api/translate/create', {
+						appId: this.ts.appId,
 						slug: doc.slug,
 						lang: this.ts.language.code,
 						translate: updated.translate
@@ -106,48 +108,6 @@ export class TranslatesComponent {
 				});
 		}
 	};
-
-	translateAll(missed = false): void {
-		const rows = missed
-			? this.rows.filter(
-					(r) => !this.ts.translates[this.ts.language.code][r.slug]
-			  )
-			: this.rows;
-		const words = JSON.stringify(rows.map((r) => r.word));
-		const slugs = rows.map((r) => r.slug);
-		const translates = JSON.stringify(
-			rows.map((r) => this.ts.translate(r.slug))
-		);
-		this._form
-			.modal<TranslateAll>(this.formAll, [], {
-				words,
-				translates
-			})
-			.then((updated: TranslateAll) => {
-				if (translates === updated.translates) {
-					return;
-				}
-				const translated = JSON.parse(updated.translates);
-				for (let i = 0; i < slugs.length; i++) {
-					this._http.post('/api/translate/create', {
-						slug: slugs[i],
-						lang: this.ts.language.code,
-						translate: translated[i]
-					});
-
-					this.ts.translates[this.ts.language.code][slugs[i]] =
-						translated[i];
-				}
-				this.ts.reset();
-			});
-	}
-
-	set_language(code: string) {
-		this.ts.set_language(
-			this.ts.languages.find((l) => l.code === code) as Language
-		);
-	}
-
 	pages = [
 		{
 			name: this.ts.translate('Common.All'),
@@ -179,7 +139,47 @@ export class TranslatesComponent {
 		public ts: TranslateService,
 		private _form: FormService,
 		private _http: HttpService
-	) {
-		console.log(this.page);
+	) {}
+
+	translateAll(missed = false): void {
+		const rows = missed
+			? this.rows.filter(
+				(r) => !this.ts.translates[this.ts.language.code][r.slug]
+			)
+			: this.rows;
+		const words = JSON.stringify(rows.map((r) => r.word));
+		const slugs = rows.map((r) => r.slug);
+		const translates = JSON.stringify(
+			rows.map((r) => this.ts.translate(r.slug))
+		);
+		this._form
+			.modal<TranslateAll>(this.formAll, [], {
+				words,
+				translates
+			})
+			.then((updated: TranslateAll) => {
+				if (translates === updated.translates) {
+					return;
+				}
+				const translated = JSON.parse(updated.translates);
+				for (let i = 0; i < slugs.length; i++) {
+					this._http.post('/api/translate/create', {
+						appId: this.ts.appId,
+						slug: slugs[i],
+						lang: this.ts.language.code,
+						translate: translated[i]
+					});
+
+					this.ts.translates[this.ts.language.code][slugs[i]] =
+						translated[i];
+				}
+				this.ts.reset();
+			});
+	}
+
+	set_language(code: string) {
+		this.ts.set_language(
+			this.ts.languages.find((l) => l.code === code) as Language
+		);
 	}
 }

@@ -85,6 +85,12 @@ export class SignComponent {
 					{
 						name: 'Submit',
 						value: true
+					},
+					{
+						name: 'Click',
+						value: () => {
+							this.submit(this.user as Form);
+						}
 					}
 				]
 			}

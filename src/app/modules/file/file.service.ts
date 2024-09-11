@@ -10,9 +10,9 @@ export class FileService {
 	constructor(private _file: WacomFileService) {
 		this._file.add({
 			id: 'formPhoto',
-			accept: 'image/*',
+			// accept: 'image/*',
 			resize: 1920,
-			cb: (file: string | File) => {
+			cb: (file: any) => {
 				if (typeof file === 'string' && typeof this.setFile === 'function') {
 					this.setFile(file);
 				}
@@ -21,10 +21,10 @@ export class FileService {
 
 		this._file.add({
 			id: 'formPhotos',
-			accept: 'image/*',
+			// accept: 'image/*',
 			multiple: true,
 			resize: 1920,
-			cb: (file: string | File) => {
+			cb: (file: any) => {
 				if (typeof file === 'string' && typeof this.setFile === 'function') {
 					this.setFile(file);
 				}

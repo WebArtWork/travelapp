@@ -18,7 +18,7 @@
 						Common.Select page
 					</div>
 					<wselect
-						style="width: 300px;"
+						style="width: 300px"
 						[items]="pages"
 						[select]="page"
 						(modelChange)="setPage($event)"
@@ -34,7 +34,10 @@
 
 					<span translate>Common.Translate all</span>
 				</wbutton>
-				<wbutton class="translate__dawn-jcon" (click)="translateAll(true)">
+				<wbutton
+					class="translate__dawn-jcon"
+					(click)="translateAll(true)"
+				>
 					<span class="material-icons ng-tns-c405976996-4">
 						translate
 					</span>

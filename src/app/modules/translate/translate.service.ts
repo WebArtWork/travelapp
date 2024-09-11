@@ -23,6 +23,7 @@ export interface Word {
 })
 export class TranslateService {
 	readonly allLanguages = languages;
+	readonly appId = (environment as unknown as { appId: string }).appId;
 
 	constructor(
 		private store: StoreService,
@@ -35,7 +36,7 @@ export class TranslateService {
 			}
 		});
 
-		this._core.on('languages', (languages: Language[])=>{
+		this._core.on('languages').subscribe((languages: Language[]) => {
 			this.languages = languages;
 		});
 
@@ -51,7 +52,7 @@ export class TranslateService {
 			}
 		});
 
-		this.http.get('/api/translate/get', (obj) => {
+		this.http.get('/api/translate/get' + (this.appId ? '/' + this.appId : ''), (obj) => {
 			if (obj) {
 				this.translates = obj;
 
@@ -59,7 +60,7 @@ export class TranslateService {
 			}
 		});
 
-		this.http.get('/api/word/get', (arr) => {
+		this.http.get('/api/word/get' + (this.appId ? '/' + this.appId : ''), (arr) => {
 			if (arr) {
 				this.words = arr;
 
@@ -87,11 +88,11 @@ export class TranslateService {
 			if (this.words[i]._id == word._id) this.words.splice(i, 1);
 		}
 
-		this.http.post('/api/word/delete', {
+		this.http.post('/api/word/delete' + (this.appId ? '/' + this.appId : ''), {
 			_id: word._id
 		});
 
-		this.http.post('/api/translate/delete', {
+		this.http.post('/api/translate/delete' + (this.appId ? '/' + this.appId : ''), {
 			slug: word.slug
 		});
 	}
@@ -103,22 +104,23 @@ export class TranslateService {
 	).languages
 		? (environment as unknown as { languages: Language[] }).languages
 		: [
-				{
-					code: 'en',
-					name: 'English',
-					origin: 'English'
-				}
-		  ];
-	language: Language = this.languages.length
-		? this.languages[0]
-		: {
+			{
 				code: 'en',
 				name: 'English',
 				origin: 'English'
-		  };
+			}
+		];
+	language: Language = this.languages.length
+		? this.languages[0]
+		: {
+			code: 'en',
+			name: 'English',
+			origin: 'English'
+		};
 	set_language(language: Language) {
 		if (language) {
 			this.http.post('/api/translate/set', {
+				appId: this.appId,
 				language: language.code
 			});
 
@@ -212,6 +214,7 @@ export class TranslateService {
 			this.http.post(
 				'/api/word/create',
 				{
+					appId: this.appId,
 					slug: slug,
 					word: this._slug2name(slug),
 					page: slug.split('.')[0],
@@ -233,6 +236,7 @@ export class TranslateService {
 	update_translate(slug: string, languageCode: string, translate: string) {
 		this._core.afterWhile(this, () => {
 			this.http.post('/api/translate/create', {
+				appId: this.appId,
 				slug,
 				translate,
 				lang: languageCode
