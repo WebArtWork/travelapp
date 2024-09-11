@@ -17,6 +17,7 @@
     "@angular/platform-browser": "^18.2.3",
     "@angular/platform-browser-dynamic": "^18.2.3",
     "@angular/router": "^18.2.3",
+    "@angular/service-worker": "^18.2.3",
     "@types/node": "^20.1.5",
     "ngx-image-cropper": "^7.1.1",
     "rxjs": "~7.5.0",

@@ -1,6 +1,6 @@
 import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, Renderer2 } from '@angular/core';
+import { NgModule, Renderer2, isDevMode } from '@angular/core';
 // Core
 import { GuestComponent } from './core/theme/guest/guest.component';
 import { UserComponent } from './core/theme/user/user.component';
@@ -17,6 +17,7 @@ import { AdminsGuard } from './core/guards/admins.guard';
 import { AlertModule } from './modules/alert/alert.module';
 import { ModalModule } from './modules/modal/modal.module';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 const routes: Routes = [
 	{
@@ -162,7 +163,13 @@ const routes: Routes = [
 		RouterModule.forRoot(routes, {
 			scrollPositionRestoration: 'enabled',
 			preloadingStrategy: PreloadAllModules
-		})
+		}),
+  ServiceWorkerModule.register('ngsw-worker.js', {
+    enabled: !isDevMode(),
+    // Register the ServiceWorker as soon as the application is stable
+    // or after 30 seconds (whichever comes first).
+    registrationStrategy: 'registerWhenStable:30000'
+  })
 	],
 	providers: [
 		AuthenticatedGuard,

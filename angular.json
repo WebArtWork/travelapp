@@ -77,7 +77,8 @@
 								}
 							],
 							"outputHashing": "all",
-							"outputPath": "dist/app"
+              "outputPath": "dist/app",
+              "serviceWorker": "ngsw-config.json"
 						},
 						"docs": {
 							"budgets": [
