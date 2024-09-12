@@ -90,7 +90,7 @@ export class TravelappointmentService extends CrudService<Travelappointment> {
 			});
 	}
 
-	date(ap: Travelappointment): string {
-		return `${ap.year}${ap.month}${ap.day}`;
+	date(ap: Travelappointment, join = '.'): string {
+		return `${ap.year}${join}${ap.month}${join}${ap.day}`;
 	}
 }

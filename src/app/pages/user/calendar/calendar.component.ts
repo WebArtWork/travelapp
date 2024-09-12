@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import {
 	Travelappointment,
 	TravelappointmentService
@@ -38,11 +38,13 @@ export class CalendarComponent {
 	};
 	constructor(
 		private _tas: TravelappointmentService,
-		private _form: FormService,
 		private _translate: TranslateService,
-		private _alert: AlertService
+		private _alert: AlertService,
+		private _form: FormService
 	) {
 		this._onMonthChange();
+
+		this.onResize();
 	}
 	// Appointment management
 	tad = this._tas.travelappointmentsByDate; // object with array's of appointments
@@ -334,6 +336,30 @@ export class CalendarComponent {
 		this.startDay = daysInPreviousMonth - this.skipDays;
 
 		this.keepDays = (daysInMonth + this.skipDays) % 7;
+
+		this.selectedDate = '';
+	}
+	isMobile: boolean;
+	@HostListener('window:resize') onResize() {
+		this.isMobile = window.innerWidth <= 768;
+	}
+	date(year: number, month: number, day: number, join = '.'): string {
+		return `${year}${join}${month}${join}${day}`;
+	}
+	selectedDate: string;
+	dateClicked(date: string): void {
+		if (this.isMobile) {
+			this.selectedDate = date;
+		} else {
+			this.createAppointment(date);
+		}
+	}
+	eventClicked(event: Travelappointment) {
+		if (this.isMobile) {
+			this.selectedDate = this._tas.date(event);
+		} else {
+			this.updateAppointment(event);
+		}
 	}
 
 	/* move to wacom */
