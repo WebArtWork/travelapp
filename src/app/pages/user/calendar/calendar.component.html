@@ -56,8 +56,13 @@
 			<span *ngIf="!i && skipDays >= day">
 				<span>{{startDay + day}}</span>
 				<div>
-					{{tad['' + previousYear + previousMonth + (startDay +
-					day)]|json}}
+					<div
+						*ngFor="let appointment of tad['' + previousYear + previousMonth + (startDay +
+					day)]"
+						(click)="updateAppointment(appointment); $event.stopPropagation()"
+					>
+						{{appointment|json}}
+					</div>
 				</div>
 			</span>
 
@@ -71,8 +76,13 @@
 			>
 				<div>{{day + (i * 7) - skipDays}}</div>
 				<div>
-					{{tad['' + currentYear + currentMonth + (day + (i * 7) -
-					skipDays)]|json}}
+					<div
+						*ngFor="let appointment of tad['' + currentYear + currentMonth + (day + (i * 7) -
+					skipDays)]"
+						(click)="updateAppointment(appointment); $event.stopPropagation()"
+					>
+						{{appointment|json}}
+					</div>
 				</div>
 			</span>
 
@@ -80,7 +90,12 @@
 			<span *ngIf="i === weeksInMonth.length - 1 && keepDays < day">
 				<div>{{day - keepDays}}</div>
 				<div>
-					{{tad['' + nextYear + nextMonth + (day - keepDays)]|json}}
+					<div
+						*ngFor="let appointment of tad['' + nextYear + nextMonth + (day - keepDays)]"
+						(click)="updateAppointment(appointment); $event.stopPropagation()"
+					>
+						{{appointment|json}}
+					</div>
 				</div>
 			</span>
 		</span>

@@ -32,17 +32,21 @@ export class FormService {
 		private _store: StoreService,
 		private _alert: AlertService
 	) {
-		this.customForms = _mongo.get('form', {
-			param: '?appId=' + this.appId
-		}, (arr: any, obj: any) => {
-			this._forms = obj;
+		this.customForms = _mongo.get(
+			'form',
+			{
+				param: '?appId=' + this.appId
+			},
+			(arr: any, obj: any) => {
+				this._forms = obj;
 
-			for (const form of this.customForms) {
-				for (const component of form.components) {
-					this.addRef(component);
+				for (const form of this.customForms) {
+					for (const component of form.components) {
+						this.addRef(component);
+					}
 				}
 			}
-		});
+		);
 
 		this._store.getJson('formIds', (formIds: string[]) => {
 			if (Array.isArray(formIds)) {
@@ -90,7 +94,8 @@ export class FormService {
 			component.fieldComponent = component.fieldComponent || {};
 
 			for (const field in component.fieldComponent) {
-				this.customFieldComponent[component.name + field] = component.fieldComponent[field];
+				this.customFieldComponent[component.name + field] =
+					component.fieldComponent[field];
 			}
 		}
 	}
@@ -323,6 +328,7 @@ export class FormService {
 					resolve(this.submition);
 				},
 				submit: (update: T) => {
+					console.log(update);
 					resolve(update);
 				},
 				change: (update: T) => {

@@ -3,6 +3,11 @@ import {
 	Travelappointment,
 	TravelappointmentService
 } from '../../../core/services/travelappointment.service';
+// import { TranslateService } from 'src/app/modules/translate/translate.service';
+import { TranslateService } from '../../../modules/translate/translate.service';
+import { FormService } from '../../../modules/form/form.service';
+import { FormInterface } from '../../../modules/form/interfaces/form.interface';
+import { AlertService } from '../../../modules/alert/alert.service';
 
 @Component({
 	templateUrl: './calendar.component.html',
@@ -32,20 +37,215 @@ export class CalendarComponent {
 		10: 'Листопад',
 		11: 'Грудень'
 	};
-	constructor(private _tas: TravelappointmentService) {
+	constructor(
+		private _tas: TravelappointmentService,
+		private _form: FormService,
+		private _translate: TranslateService,
+		private _alert: AlertService
+	) {
 		this._onMonthChange();
 	}
 	// Appointment management
 	tad = this._tas.travelappointmentsByDate; // object with array's of appointments
+	form: FormInterface = this._form.getForm('travelappointment', {
+		formId: 'travelappointment',
+		title: 'Appointment',
+		components: [
+			{
+				name: 'Text',
+				key: 'from',
+				focused: true,
+				fields: [
+					{
+						name: 'Placeholder',
+						value: 'fill from city'
+					},
+					{
+						name: 'Label',
+						value: 'From City'
+					}
+				]
+			},
+			{
+				name: 'Text',
+				key: 'fromTime',
+				fields: [
+					{
+						name: 'Placeholder',
+						value: 'fill from time'
+					},
+					{
+						name: 'Label',
+						value: 'From Time'
+					}
+				]
+			},
+			{
+				name: 'Text',
+				key: 'fromHref',
+				fields: [
+					{
+						name: 'Placeholder',
+						value: 'fill from href'
+					},
+					{
+						name: 'Label',
+						value: 'From Href'
+					}
+				]
+			},
+			{
+				name: 'Text',
+				key: 'to',
+				fields: [
+					{
+						name: 'Placeholder',
+						value: 'fill to city'
+					},
+					{
+						name: 'Label',
+						value: 'To City'
+					}
+				]
+			},
+			{
+				name: 'Text',
+				key: 'toHref',
+				fields: [
+					{
+						name: 'Placeholder',
+						value: 'fill to city'
+					},
+					{
+						name: 'Label',
+						value: 'To City'
+					}
+				]
+			},
+			{
+				name: 'Text',
+				key: 'toTime',
+				fields: [
+					{
+						name: 'Placeholder',
+						value: 'fill to time'
+					},
+					{
+						name: 'Label',
+						value: 'To Time'
+					}
+				]
+			},
+			{
+				name: 'Text',
+				key: 'phone',
+				fields: [
+					{
+						name: 'Placeholder',
+						value: 'fill to time'
+					},
+					{
+						name: 'Label',
+						value: 'To Time'
+					}
+				]
+			}
+		]
+	});
 	createAppointment(date: string): void {
-		console.log('createAppointment', date, {
+		const submition = {
 			year: Number(date.split('.')[0]),
 			month: Number(date.split('.')[1]),
 			day: Number(date.split('.')[2])
-		});
+		};
+
+		this._form
+			.modal<Travelappointment>(
+				this.form,
+				{
+					label: 'Create',
+					click: (created: unknown, close: () => void) => {
+						this._tas.create(
+							{
+								...submition,
+								...(created as object)
+							} as Travelappointment,
+							{
+								alert: this._translate.translate(
+									'Travel.Appointment has been created'
+								),
+								callback: () => {
+									close();
+								}
+							}
+						);
+					}
+				},
+				submition
+			)
+			.then(this._tas.create.bind(this));
 	}
 	updateAppointment(appointment: Travelappointment): void {
-		console.log('updateAppointment');
+		this._form.modal<Travelappointment>(
+			this.form,
+			[
+				{
+					label: this._translate.translate('Common.Delete'),
+					class: 'left',
+					click: (updated: unknown, close: () => void) => {
+						close();
+						this._alert.question({
+							text: this._translate.translate(
+								'Common.Are you sure you want to delete this appointment?'
+							),
+							buttons: [
+								{
+									text: this._translate.translate('Common.No')
+								},
+								{
+									text: this._translate.translate(
+										'Common.Yes'
+									),
+									callback: () => {
+										this._tas.delete(
+											{
+												...appointment
+											} as Travelappointment,
+											{
+												alert: this._translate.translate(
+													'Travel.Appointment has been deleted'
+												)
+											}
+										);
+									}
+								}
+							]
+						});
+					}
+				},
+				{
+					label: this._translate.translate('Common.Update'),
+					class: 'right',
+					click: (updated: unknown, close: () => void) => {
+						this._tas.update(
+							{
+								...appointment,
+								...(updated as object)
+							} as Travelappointment,
+							{
+								alert: this._translate.translate(
+									'Travel.Appointment has been updated'
+								),
+								callback: () => {
+									close();
+								}
+							}
+						);
+					}
+				}
+			],
+			appointment
+		);
 	}
 	// Calendar management
 	currentMonth = new Date().getMonth();
