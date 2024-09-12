@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CoreModule } from 'src/app/core/core.module';
 import { CitiesComponent } from './cities.component';
 import { Routes, RouterModule } from '@angular/router';
+import { CitiesDistanceComponent } from './cities-distance/cities-distance.component';
 
 const routes: Routes = [{
 	path: '',
@@ -14,7 +15,8 @@ const routes: Routes = [{
 		CoreModule
 	],
 	declarations: [
-		CitiesComponent
+		CitiesComponent,
+  CitiesDistanceComponent
 	],
 	providers: []
 

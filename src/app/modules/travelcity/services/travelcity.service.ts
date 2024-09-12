@@ -10,14 +10,15 @@ import {
 
 export interface Travelcity extends CrudDocument {
 	name: string;
-	description: string;
+	short: string;
+	data: Record<string, unknown>;
 }
 
 @Injectable({
 	providedIn: 'root'
 })
 export class TravelcityService extends CrudService<Travelcity> {
-	travelcitys: Travelcity[] = [];
+	travelcities: Travelcity[] = [];
 	constructor(
 		_http: HttpService,
 		_store: StoreService,
@@ -33,17 +34,26 @@ export class TravelcityService extends CrudService<Travelcity> {
 			_alert,
 			_core
 		);
-		this.get().subscribe((travelcitys: Travelcity[]) =>
-			this.travelcitys.push(...travelcitys)
+
+		this.get().subscribe((travelcities: Travelcity[]) =>
+			this.travelcities.push(...travelcities)
 		);
-		_core.on('travelcity_create').subscribe((travelcity: Travelcity) => {
-			this.travelcitys.push(travelcity);
-		});
-		_core.on('travelcity_delete').subscribe((travelcity: Travelcity) => {
-			this.travelcitys.splice(
-				this.travelcitys.findIndex((o) => o._id === travelcity._id),
-				1
-			);
-		});
+
+		_core
+			.on('travelcity_create')
+			.subscribe((travelcity: Travelcity): void => {
+				this.travelcities.push(travelcity);
+			});
+
+		_core
+			.on('travelcity_delete')
+			.subscribe((travelcity: Travelcity): void => {
+				this.travelcities.splice(
+					this.travelcities.findIndex(
+						(o) => o._id === travelcity._id
+					),
+					1
+				);
+			});
 	}
 }

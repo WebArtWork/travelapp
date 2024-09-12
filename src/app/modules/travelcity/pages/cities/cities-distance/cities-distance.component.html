@@ -1,0 +1,10 @@
+<ng-container *ngFor="let ct of tcs.travelcities">
+	<div *ngIf="ct._id !== city._id">
+		<winput
+			(wChange)="city.data['to' + ct._id] = $event; tcs.updateAfterWhile(city)"
+			[placeholder]="'Please fill ' + city.name + ' to ' + ct.name"
+			[value]="city.data['to' + ct._id] || null"
+			[label]="city.name + ' to ' + ct.name"
+		></winput>
+	</div>
+</ng-container>
