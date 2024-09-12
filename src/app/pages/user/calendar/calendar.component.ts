@@ -1,13 +1,19 @@
 import { Component } from '@angular/core';
+import {
+	Travelappointment,
+	TravelappointmentService
+} from '../../../core/services/travelappointment.service';
+// import { TranslateService } from 'src/app/modules/translate/translate.service';
+import { TranslateService } from '../../../modules/translate/translate.service';
+import { FormService } from '../../../modules/form/form.service';
+import { FormInterface } from '../../../modules/form/interfaces/form.interface';
+import { AlertService } from '../../../modules/alert/alert.service';
 
 @Component({
 	templateUrl: './calendar.component.html',
 	styleUrls: ['./calendar.component.scss']
 })
 export class CalendarComponent {
-	constructor() {
-		this._onMonthChange();
-	}
 	readonly dayTitle: Record<number, string> = {
 		1: 'ПН',
 		2: 'ВТ',
@@ -31,8 +37,223 @@ export class CalendarComponent {
 		10: 'Листопад',
 		11: 'Грудень'
 	};
+	constructor(
+		private _tas: TravelappointmentService,
+		private _form: FormService,
+		private _translate: TranslateService,
+		private _alert: AlertService
+	) {
+		this._onMonthChange();
+	}
+	// Appointment management
+	tad = this._tas.travelappointmentsByDate; // object with array's of appointments
+	form: FormInterface = this._form.getForm('travelappointment', {
+		formId: 'travelappointment',
+		title: 'Appointment',
+		components: [
+			{
+				name: 'Text',
+				key: 'from',
+				focused: true,
+				fields: [
+					{
+						name: 'Placeholder',
+						value: 'fill from city'
+					},
+					{
+						name: 'Label',
+						value: 'From City'
+					}
+				]
+			},
+			{
+				name: 'Text',
+				key: 'fromTime',
+				fields: [
+					{
+						name: 'Placeholder',
+						value: 'fill from time'
+					},
+					{
+						name: 'Label',
+						value: 'From Time'
+					}
+				]
+			},
+			{
+				name: 'Text',
+				key: 'fromHref',
+				fields: [
+					{
+						name: 'Placeholder',
+						value: 'fill from href'
+					},
+					{
+						name: 'Label',
+						value: 'From Href'
+					}
+				]
+			},
+			{
+				name: 'Text',
+				key: 'to',
+				fields: [
+					{
+						name: 'Placeholder',
+						value: 'fill to city'
+					},
+					{
+						name: 'Label',
+						value: 'To City'
+					}
+				]
+			},
+			{
+				name: 'Text',
+				key: 'toHref',
+				fields: [
+					{
+						name: 'Placeholder',
+						value: 'fill to href'
+					},
+					{
+						name: 'Label',
+						value: 'To Href'
+					}
+				]
+			},
+			{
+				name: 'Text',
+				key: 'toTime',
+				fields: [
+					{
+						name: 'Placeholder',
+						value: 'fill to time'
+					},
+					{
+						name: 'Label',
+						value: 'To Time'
+					}
+				]
+			},
+			{
+				name: 'Text',
+				key: 'phone',
+				fields: [
+					{
+						name: 'Placeholder',
+						value: 'fill phone'
+					},
+					{
+						name: 'Label',
+						value: 'To Phone'
+					}
+				]
+			}
+		]
+	});
+	createAppointment(date: string): void {
+		const submition = {
+			year: Number(date.split('.')[0]),
+			month: Number(date.split('.')[1]),
+			day: Number(date.split('.')[2])
+		};
+
+		this._form
+			.modal<Travelappointment>(
+				this.form,
+				{
+					label: 'Create',
+					click: (created: unknown, close: () => void) => {
+						this._tas.create(
+							{
+								...submition,
+								...(created as object)
+							} as Travelappointment,
+							{
+								alert: this._translate.translate(
+									'Travel.Appointment has been created'
+								),
+								callback: () => {
+									close();
+								}
+							}
+						);
+					}
+				},
+				submition
+			)
+			.then(this._tas.create.bind(this));
+	}
+	updateAppointment(appointment: Travelappointment): void {
+		this._form.modal<Travelappointment>(
+			this.form,
+			[
+				{
+					label: this._translate.translate('Common.Delete'),
+					class: 'left',
+					click: (updated: unknown, close: () => void) => {
+						close();
+						this._alert.question({
+							text: this._translate.translate(
+								'Common.Are you sure you want to delete this appointment?'
+							),
+							buttons: [
+								{
+									text: this._translate.translate('Common.No')
+								},
+								{
+									text: this._translate.translate(
+										'Common.Yes'
+									),
+									callback: () => {
+										this._tas.delete(
+											{
+												...appointment
+											} as Travelappointment,
+											{
+												alert: this._translate.translate(
+													'Travel.Appointment has been deleted'
+												)
+											}
+										);
+									}
+								}
+							]
+						});
+					}
+				},
+				{
+					label: this._translate.translate('Common.Update'),
+					class: 'right',
+					click: (updated: unknown, close: () => void) => {
+						this._tas.update(
+							{
+								...appointment,
+								...(updated as object)
+							} as Travelappointment,
+							{
+								alert: this._translate.translate(
+									'Travel.Appointment has been updated'
+								),
+								callback: () => {
+									close();
+								}
+							}
+						);
+					}
+				}
+			],
+			appointment
+		);
+	}
+	// Calendar management
 	currentMonth = new Date().getMonth();
 	currentYear = new Date().getFullYear();
+	previousMonth: number;
+	previousYear: number;
+	nextMonth: number;
+	nextYear: number;
 	setNow(): void {
 		this.currentMonth = new Date().getMonth();
 
@@ -40,7 +261,7 @@ export class CalendarComponent {
 
 		this._onMonthChange();
 	}
-	previousMonth(): void {
+	setPreviousMonth(): void {
 		this.currentMonth--;
 		if (this.currentMonth === -1) {
 			this.currentMonth = 11;
@@ -50,7 +271,7 @@ export class CalendarComponent {
 
 		this._onMonthChange();
 	}
-	nextMonth(): void {
+	setNextMonth(): void {
 		this.currentMonth++;
 		if (this.currentMonth === 12) {
 			this.currentMonth = 0;
@@ -61,18 +282,59 @@ export class CalendarComponent {
 		this._onMonthChange();
 	}
 	weeksInMonth: number[] = [];
+	startDay = 0; // date of previous month, first in first row, -1
+	skipDays = 0; // skipped days on first row
+	keepDays = 0; // days on latest row
 	private _onMonthChange() {
+		if (this.currentMonth === 11) {
+			this.previousMonth = 10;
+			this.previousYear = this.currentYear;
+			this.nextMonth = 0;
+			this.nextYear = this.currentYear + 1;
+		} else if (this.currentMonth === 0) {
+			this.previousMonth = 11;
+			this.previousYear = this.currentYear - 1;
+			this.nextMonth = 1;
+			this.nextYear = this.currentYear;
+		} else {
+			this.previousMonth = this.currentMonth - 1;
+			this.previousYear = this.currentYear;
+			this.nextMonth = this.currentMonth + 1;
+			this.nextYear = this.currentYear;
+		}
+
 		const firstDayOfMonth = new Date(
 			this.currentYear,
 			this.currentMonth,
 			1
 		);
+
 		const firstWeek = this.getWeekNumber(firstDayOfMonth);
+
 		this.weeksInMonth = [];
+
 		const weeks = this.getWeeksInMonth(this.currentMonth, this.currentYear);
+
 		for (let i = 0; i < weeks; i++) {
 			this.weeksInMonth.push(firstWeek + i);
 		}
+
+		this.skipDays =
+			(firstDayOfMonth.getDay() === 0 ? 7 : firstDayOfMonth.getDay()) - 1;
+
+		const daysInPreviousMonth =
+			this.currentMonth > 1
+				? this.getDaysInMonth(this.currentMonth - 1, this.currentYear)
+				: this.getDaysInMonth(11, this.currentYear - 1);
+
+		const daysInMonth = this.getDaysInMonth(
+			this.currentMonth,
+			this.currentYear
+		);
+
+		this.startDay = daysInPreviousMonth - this.skipDays;
+
+		this.keepDays = (daysInMonth + this.skipDays) % 7;
 	}
 
 	/* move to wacom */
@@ -98,5 +360,8 @@ export class CalendarComponent {
 			lastWeek = this.getWeekNumber(new Date(year, 11, 31)); // Get week of the last day of the year
 		}
 		return lastWeek - firstWeek + 1;
+	}
+	getDaysInMonth(month: number, year: number): number {
+		return new Date(year, month + 1, 0).getDate();
 	}
 }
