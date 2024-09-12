@@ -49,6 +49,20 @@ export class CitiesComponent {
 						value: 'Short'
 					}
 				]
+			},
+			{
+				name: 'Text',
+				key: 'href',
+				fields: [
+					{
+						name: 'Placeholder',
+						value: 'fill city href'
+					},
+					{
+						name: 'Label',
+						value: 'Href'
+					}
+				]
 			}
 		]
 	});
