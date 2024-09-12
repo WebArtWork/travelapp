@@ -1,6 +1,6 @@
 import { RouterModule, Routes, PreloadAllModules } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, Renderer2, isDevMode } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 // Core
 import { GuestComponent } from './core/theme/guest/guest.component';
 import { UserComponent } from './core/theme/user/user.component';
@@ -18,6 +18,8 @@ import { AlertModule } from './modules/alert/alert.module';
 import { ModalModule } from './modules/modal/modal.module';
 import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { ManagersGuard } from './core/guards/managers.guard';
+import { DriversGuard } from './core/guards/drivers.guard';
 
 const routes: Routes = [
 	{
@@ -47,6 +49,61 @@ const routes: Routes = [
 		]
 	},
 	{
+		path: 'manager',
+		canActivate: [ManagersGuard],
+		component: UserComponent,
+		children: [
+			/* user */
+			{
+				path: 'calendar',
+				canActivate: [MetaGuard],
+				data: {
+					meta: {
+						title: 'Calendar'
+					}
+				},
+				loadChildren: () =>
+					import('./pages/user/calendar/calendar.module').then(
+						(m) => m.CalendarModule
+					)
+			},
+			{
+				path: 'cities',
+				canActivate: [MetaGuard],
+				data: {
+					meta: {
+						title: 'Cities'
+					}
+				},
+				loadChildren: () =>
+					import(
+						'./modules/travelcity/pages/cities/cities.module'
+					).then((m) => m.CitiesModule)
+			}
+		]
+	},
+	{
+		path: 'driver',
+		canActivate: [DriversGuard],
+		component: UserComponent,
+		children: [
+			/* user */
+			{
+				path: 'calendar',
+				canActivate: [MetaGuard],
+				data: {
+					meta: {
+						title: 'Calendar'
+					}
+				},
+				loadChildren: () =>
+					import('./pages/user/calendar/calendar.module').then(
+						(m) => m.CalendarModule
+					)
+			}
+		]
+	},
+	{
 		path: '',
 		canActivate: [AuthenticatedGuard],
 		component: UserComponent,
@@ -60,8 +117,11 @@ const routes: Routes = [
 						title: 'Calendar'
 					}
 				},
-				loadChildren: () => import('./pages/user/calendar/calendar.module').then(m => m.CalendarModule)
-			}, 
+				loadChildren: () =>
+					import('./pages/user/calendar/calendar.module').then(
+						(m) => m.CalendarModule
+					)
+			},
 			{
 				path: 'profile',
 				canActivate: [MetaGuard],
@@ -164,15 +224,17 @@ const routes: Routes = [
 			scrollPositionRestoration: 'enabled',
 			preloadingStrategy: PreloadAllModules
 		}),
-  ServiceWorkerModule.register('ngsw-worker.js', {
-    enabled: !isDevMode(),
-    // Register the ServiceWorker as soon as the application is stable
-    // or after 30 seconds (whichever comes first).
-    registrationStrategy: 'registerWhenStable:30000'
-  })
+		ServiceWorkerModule.register('ngsw-worker.js', {
+			enabled: !isDevMode(),
+			// Register the ServiceWorker as soon as the application is stable
+			// or after 30 seconds (whichever comes first).
+			registrationStrategy: 'registerWhenStable:30000'
+		})
 	],
 	providers: [
 		AuthenticatedGuard,
+		ManagersGuard,
+		DriversGuard,
 		GuestGuard,
 		AdminsGuard,
 		{

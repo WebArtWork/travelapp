@@ -91,14 +91,38 @@
 				<a
 					[routerLinkActiveOptions]="{ exact: true }"
 					routerLinkActive="_activeLink"
-					routerLink="/calendar"
+					routerLink="/manager/cities"
 					class="nav__burger-link"
+					*ngIf="us.role('travelmanager')"
+					(click)="hideSidebar()"
+				>
+					<span class="material-icons">location_city</span>
+					<span translate>Theme.Cities</span>
+				</a>
+				<a
+					[routerLinkActiveOptions]="{ exact: true }"
+					routerLinkActive="_activeLink"
+					routerLink="/manager/calendar"
+					class="nav__burger-link"
+					*ngIf="us.role('travelmanager')"
 					(click)="hideSidebar()"
 				>
 					<span class="material-icons">calendar_today</span>
 					<span translate>Theme.Calendar</span>
 				</a>
-				<hr />
+				<hr *ngIf="us.role('travelmanager')" />
+				<a
+					[routerLinkActiveOptions]="{ exact: true }"
+					routerLinkActive="_activeLink"
+					routerLink="/driver/calendar"
+					class="nav__burger-link"
+					*ngIf="us.role('traveldriver')"
+					(click)="hideSidebar()"
+				>
+					<span class="material-icons">calendar_today</span>
+					<span translate>Theme.Calendar</span>
+				</a>
+				<hr *ngIf="us.role('traveldriver')" />
 			</div>
 		</div>
 		<router-outlet></router-outlet>
