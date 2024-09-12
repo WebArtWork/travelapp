@@ -114,11 +114,11 @@ export class CalendarComponent {
 				fields: [
 					{
 						name: 'Placeholder',
-						value: 'fill to city'
+						value: 'fill to href'
 					},
 					{
 						name: 'Label',
-						value: 'To City'
+						value: 'To Href'
 					}
 				]
 			},
@@ -142,11 +142,11 @@ export class CalendarComponent {
 				fields: [
 					{
 						name: 'Placeholder',
-						value: 'fill to time'
+						value: 'fill phone'
 					},
 					{
 						name: 'Label',
-						value: 'To Time'
+						value: 'To Phone'
 					}
 				]
 			}
