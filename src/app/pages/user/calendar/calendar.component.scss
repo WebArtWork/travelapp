@@ -18,7 +18,12 @@
         font-weight: 900;
         display: flex;
         flex-flow: column wrap;
-        justify-content: space-between;
+        &-name{
+            color: var(--day-name);
+            font-size: 12px;
+            font-weight: 700;
+            padding-bottom: 3px;
+        }
     }
     &__week{
         position: absolute;
@@ -51,10 +56,16 @@
     }
     &-events{
         font-size: 12px;
-        background: #1c2e32;
+        background: var(--events);
         border-radius: 5px;
         font-weight: 500;
         color: #ffffff;
+        padding: 5px;
+        display: flex;
+        justify-content: space-between;
+        &__text{
+            font-weight: 900;
+        }
     }
 }
 .calendar-nav{
@@ -97,5 +108,66 @@
     }
     &__today{
         margin-right: 20px;
+    }
+}
+
+.line{
+    width: 100%;
+    z-index: 1;
+    background: #fff;
+    height: 1px;
+    margin: 15px 0; 
+}
+
+.event{
+    &__item{
+        display: flex;
+        border-bottom: 1px solid #ffffff59;
+    }
+    &__icon{
+        margin-right: 10px;
+    }
+    &-text{
+        &__title{
+            font-weight: 700;
+        }
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .calendar__day{
+        margin: 4px;
+        padding: 8px;
+        font-size: 12px;
+    }
+    .calendar-events{
+        span,div{
+            display: none;
+        }
+    }
+    .calendar__row{
+        max-height: 70px;
+    }
+    .calendar__week{
+        font-size: 12px;
+    }
+    .calendar__week{
+        width: 22px;
+        height: 22px;
+        top: -5px;
+        left: -5px;
+        font-size: 12px;
+    }
+    .calendar {
+        height: fit-content;
+    }
+    .calendar__day {
+        margin: 4px;
+        padding: 8px;
+        font-size: 12px;
+        min-height: 66px;
+    }
+    .calendar-events {
+        padding: 3px;
     }
 }

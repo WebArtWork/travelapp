@@ -62,6 +62,7 @@
     $transition: if(variable-exists(--transition), var(--transition), $default-transition);
 
     // theme
+    
     :root {
 		--c-white: #fff;
         --c-basic: #3558ae;
@@ -78,6 +79,10 @@
         --c-placeholder: #adb8c6;
 		--c-img-round: 50%;
         --c-calendar: #e1e1e1;
+        --day-name: #988888;
+        --b-radius-btn: 10px;
+        --transition: all .3s;
+        --events: #4c8e9d;
     }
 
     html.dark:root {
@@ -92,4 +97,6 @@
         --c-text-secondary: #ffffff;
         --c-placeholder: #7a7a7a;
         --c-calendar: #141414;
+        --day-name: #dad5d5;
+        --events: #1c2e32;  
     }

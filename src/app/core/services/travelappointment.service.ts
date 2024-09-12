@@ -9,8 +9,12 @@ import {
 } from 'wacom';
 
 export interface Travelappointment extends CrudDocument {
-	name: string;
-	description: string;
+	from: string;
+	fromHref: string;
+	fromTime: string;
+	to: string;
+	toHref: string;
+	toTime: string;
 	day: number;
 	month: number;
 	year: number;

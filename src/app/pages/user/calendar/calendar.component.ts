@@ -3,7 +3,6 @@ import {
 	Travelappointment,
 	TravelappointmentService
 } from '../../../core/services/travelappointment.service';
-// import { TranslateService } from 'src/app/modules/translate/translate.service';
 import { TranslateService } from '../../../modules/translate/translate.service';
 import { FormService } from '../../../modules/form/form.service';
 import { FormInterface } from '../../../modules/form/interfaces/form.interface';

@@ -1,6 +1,15 @@
 @import '/src/scss/utils/vars';
   
 
+.btn-action{
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+  .left, .right{
+    max-width: 49%;
+  }
+}
+
 .w-btn,
 button {
   font-size: $fs;
