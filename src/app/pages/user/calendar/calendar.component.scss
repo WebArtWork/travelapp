@@ -16,6 +16,9 @@
         border-radius: 10px;
         text-align: center;
         font-weight: 900;
+        display: flex;
+        flex-flow: column wrap;
+        justify-content: space-between;
     }
     &__week{
         position: absolute;
@@ -29,6 +32,29 @@
         color: #fff;
         top: -10px;
         left: -10px;
+    }
+    &-time{
+        display: flex;
+        align-items: center;
+        color: var(--c-primary);
+        line-height: 1;
+        justify-content: center;
+        &__clock{
+            display: flex;
+            margin-right: 7px;
+            svg{
+                path{
+                    fill: var(--c-primary)
+                }
+            }
+        }
+    }
+    &-events{
+        font-size: 12px;
+        background: #1c2e32;
+        border-radius: 5px;
+        font-weight: 500;
+        color: #ffffff;
     }
 }
 .calendar-nav{
