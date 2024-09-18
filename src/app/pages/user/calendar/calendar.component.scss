@@ -132,7 +132,33 @@
         &__title{
             font-weight: 700;
         }
+        &__row{
+            display: flex;
+            padding-bottom: 5px;
+            border-bottom: 1px solid #fff;
+        }
+        &__column{
+            margin-right: 20px;
+            &-from{
+                color: var(--c-primary);
+                font-weight: 900;
+            }
+            &-time{
+                font-size: 14px;
+            }
+        }
     }
+    &-driver{
+        &__name{
+            color: var(--c-primary);
+            font-weight: 900;
+            padding-top: 5px;
+        }
+        &__phone{
+            font-size: 14px;
+        }
+    }
+    
 }
 
 .add-event-mobile{

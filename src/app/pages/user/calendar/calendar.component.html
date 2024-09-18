@@ -115,7 +115,8 @@
 							>{{appointment.from}} - {{appointment.to}}</span
 						>
 						<div class="calendar-events__time">
-							{{appointment.fromTime}}
+							<span>{{appointment.fromTime}}</span>
+							<span>{{appointment.toTime}}</span>
 						</div>
 					</div>
 				</div>
@@ -176,10 +177,46 @@
 			</svg>
 		</div>
 		<div class="event-text">
-			<span class="event-text__title"
+			<div class="event-text event-text__left">
+
+				<div class="event-text__row">
+					<div class="event-text__column">
+						<div class="event-text__column-from">
+							{{appointment.from}}
+						</div>
+						<div class="event-text__column-time">
+							{{appointment.fromTime}}
+						</div>
+					</div>
+					<div class="event-text__column">
+						<div class="event-text__column-from">
+							{{appointment.to}}
+						</div>
+						<div class="event-text__column-time">
+							{{appointment.toTime}}
+						</div>
+					</div>
+				</div>
+				<div class="event-driver">
+					<div class="event-driver__name">
+						{{appointment.name}}
+					</div>
+					<div class="event-driver__phone">
+						{{appointment.phone}}
+					</div>
+				</div>
+				<!--
+					<span class="event-text__title"
 				>{{appointment.from}} - {{appointment.to}}</span
 			>
-			<div class="event-text__time">{{appointment.fromTime}}</div>
+				<div class="event-text__right">
+					<div class="event-text__time">{{appointment.fromTime}}</div>
+				</div>
+				-->
+
+			</div>
+
+			
 		</div>
 	</div>
 
