@@ -135,7 +135,7 @@
         &__row{
             display: flex;
             padding-bottom: 5px;
-            border-bottom: 1px solid #fff;
+            border-bottom: 1px solid var(--c-text-primary);
         }
         &__column{
             margin-right: 20px;
