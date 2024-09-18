@@ -18,6 +18,8 @@ export interface Travelappointment extends CrudDocument {
 	day: number;
 	month: number;
 	year: number;
+	phone: string;
+	name: string;
 }
 
 @Injectable({

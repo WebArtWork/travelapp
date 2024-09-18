@@ -139,6 +139,20 @@ export class CalendarComponent {
 			},
 			{
 				name: 'Text',
+				key: 'name',
+				fields: [
+					{
+						name: 'Placeholder',
+						value: 'fill name'
+					},
+					{
+						name: 'Label',
+						value: 'Name'
+					}
+				]
+			},
+			{
+				name: 'Text',
 				key: 'phone',
 				fields: [
 					{
@@ -147,7 +161,7 @@ export class CalendarComponent {
 					},
 					{
 						name: 'Label',
-						value: 'To Phone'
+						value: 'Phone'
 					}
 				]
 			}
@@ -193,8 +207,9 @@ export class CalendarComponent {
 				{
 					label: this._translate.translate('Common.Delete'),
 					class: 'left',
-					click: (updated: unknown, close: () => void) => {
+					click: (updated: unknown, close: () => void): void => {
 						close();
+
 						this._alert.question({
 							text: this._translate.translate(
 								'Common.Are you sure you want to delete this appointment?'
@@ -207,7 +222,7 @@ export class CalendarComponent {
 									text: this._translate.translate(
 										'Common.Yes'
 									),
-									callback: () => {
+									callback: (): void => {
 										this._tas.delete(
 											{
 												...appointment
@@ -227,7 +242,7 @@ export class CalendarComponent {
 				{
 					label: this._translate.translate('Common.Update'),
 					class: 'right',
-					click: (updated: unknown, close: () => void) => {
+					click: (updated: unknown, close: () => void): void => {
 						this._tas.update(
 							{
 								...appointment,
@@ -264,6 +279,7 @@ export class CalendarComponent {
 	}
 	setPreviousMonth(): void {
 		this.currentMonth--;
+
 		if (this.currentMonth === -1) {
 			this.currentMonth = 11;
 
@@ -274,6 +290,7 @@ export class CalendarComponent {
 	}
 	setNextMonth(): void {
 		this.currentMonth++;
+
 		if (this.currentMonth === 12) {
 			this.currentMonth = 0;
 
@@ -286,21 +303,30 @@ export class CalendarComponent {
 	startDay = 0; // date of previous month, first in first row, -1
 	skipDays = 0; // skipped days on first row
 	keepDays = 0; // days on latest row
-	private _onMonthChange() {
+	private _onMonthChange(): void {
 		if (this.currentMonth === 11) {
 			this.previousMonth = 10;
+
 			this.previousYear = this.currentYear;
+
 			this.nextMonth = 0;
+
 			this.nextYear = this.currentYear + 1;
 		} else if (this.currentMonth === 0) {
 			this.previousMonth = 11;
+
 			this.previousYear = this.currentYear - 1;
+
 			this.nextMonth = 1;
+
 			this.nextYear = this.currentYear;
 		} else {
 			this.previousMonth = this.currentMonth - 1;
+
 			this.previousYear = this.currentYear;
+
 			this.nextMonth = this.currentMonth + 1;
+
 			this.nextYear = this.currentYear;
 		}
 
@@ -340,7 +366,7 @@ export class CalendarComponent {
 		this.selectedDate = '';
 	}
 	isMobile: boolean;
-	@HostListener('window:resize') onResize() {
+	@HostListener('window:resize') onResize(): void {
 		this.isMobile = window.innerWidth <= 768;
 	}
 	date(year: number, month: number, day: number, join = '.'): string {
@@ -354,7 +380,7 @@ export class CalendarComponent {
 			this.createAppointment(date);
 		}
 	}
-	eventClicked(event: Travelappointment) {
+	eventClicked(event: Travelappointment): void {
 		if (this.isMobile) {
 			this.selectedDate = this._tas.date(event);
 		} else {
@@ -365,25 +391,35 @@ export class CalendarComponent {
 	/* move to wacom */
 	getWeekNumber(date: Date): number {
 		const tempDate = new Date(date.getTime());
+
 		tempDate.setHours(0, 0, 0, 0);
 		// Set to nearest Thursday: current date + 4 - current day number, making Thursday day 4
+
 		tempDate.setDate(tempDate.getDate() + 4 - (tempDate.getDay() || 7));
+
 		const yearStart = new Date(tempDate.getFullYear(), 0, 1);
+
 		// Calculate full weeks to nearest Thursday
+
 		return Math.ceil(
 			((tempDate.getTime() - yearStart.getTime()) / 86400000 + 1) / 7
 		);
 	}
 	getWeeksInMonth(month: number, year: number): number {
 		const firstDayOfMonth = new Date(year, month, 1);
+
 		const lastDayOfMonth = new Date(year, month + 1, 0);
+
 		// Get ISO week numbers for the first and last day of the month
 		const firstWeek = this.getWeekNumber(firstDayOfMonth);
+
 		let lastWeek = this.getWeekNumber(lastDayOfMonth);
+
 		// Special case: when January 1st is in the last week of the previous year
 		if (firstWeek > lastWeek) {
 			lastWeek = this.getWeekNumber(new Date(year, 11, 31)); // Get week of the last day of the year
 		}
+
 		return lastWeek - firstWeek + 1;
 	}
 	getDaysInMonth(month: number, year: number): number {
