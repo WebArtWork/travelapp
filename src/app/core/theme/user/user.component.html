@@ -102,6 +102,17 @@
 				<a
 					[routerLinkActiveOptions]="{ exact: true }"
 					routerLinkActive="_activeLink"
+					routerLink="/manager/drivers"
+					class="nav__burger-link"
+					*ngIf="us.role('travelmanager')"
+					(click)="hideSidebar()"
+				>
+					<span class="material-icons">commute</span>
+					<span translate>Theme.Drivers</span>
+				</a>
+				<a
+					[routerLinkActiveOptions]="{ exact: true }"
+					routerLinkActive="_activeLink"
 					routerLink="/manager/calendar"
 					class="nav__burger-link"
 					*ngIf="us.role('travelmanager')"
