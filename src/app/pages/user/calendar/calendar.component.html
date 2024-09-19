@@ -58,8 +58,8 @@
 			<span *ngIf="!i" class="calendar__day-name">{{dayTitle[day]}}</span>
 
 			<!-- previous month dates -->
-			<span *ngIf="!i && skipDays >= day">
-				<span>{{startDay + day}}</span>
+			<span class="calendar__stard-day" *ngIf="!i && skipDays >= day">
+				<span class="calendar__stard-day">{{startDay + day}}</span>
 				<div>
 					<div
 						class="calendar-events"
@@ -67,11 +67,42 @@
 					day)]"
 						(click)="eventClicked(appointment); $event.stopPropagation()"
 					>
-						<span class="calendar-events__text"
+						<!--
+
+							<span class="calendar-events__text"
 							>{{appointment.from}} - {{appointment.to}}</span
 						>
 						<div class="calendar-events__time">
 							{{appointment.fromTime}}
+						</div>
+						-->
+						<div class="calendar-events__row">
+							<div class="calendar-events__column">
+								<div class="calendar-events__name">
+									{{appointment.from}}
+								</div>
+								<div class="calendar-events__time">
+									{{appointment.fromTime}}
+								</div>
+							</div>
+							<div class="calendar-events__column">
+								<div class="calendar-events__name">
+									{{appointment.to}}
+								</div>
+								<div class="calendar-events__time">
+									{{appointment.toTime}}
+								</div>
+							</div>
+						</div>
+						<div class="calendar-events__row">
+							<div class="calendar-events__column">
+								<div class="calendar-events__name">
+									{{appointment.name}}
+								</div>
+								<div class="calendar-events__time">
+									{{appointment.phone}}
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -85,19 +116,41 @@
 					(!i && skipDays < day)
 				"
 			>
-				<div>{{day + (i * 7) - skipDays}}</div>
+				<div class="calendar__stard-day">{{day + (i * 7) - skipDays}}</div>
 				<div>
 					<div
 						class="calendar-events"
 						*ngFor="let appointment of tad[date(currentYear, currentMonth, day + (i * 7) - skipDays)]"
 						(click)="eventClicked(appointment); $event.stopPropagation()"
 					>
-						<span class="calendar-events__text"
-							>{{appointment.from}} - {{appointment.to}}</span
-						>
-						<div class="calendar-events__time">
-							{{appointment.fromTime}}
+					<div class="calendar-events__row">
+						<div class="calendar-events__column">
+							<div class="calendar-events__name">
+								{{appointment.from}}
+							</div>
+							<div class="calendar-events__time">
+								{{appointment.fromTime}}
+							</div>
 						</div>
+						<div class="calendar-events__column">
+							<div class="calendar-events__name">
+								{{appointment.to}}
+							</div>
+							<div class="calendar-events__time">
+								{{appointment.toTime}}
+							</div>
+						</div>
+					</div>
+					<div class="calendar-events__row">
+						<div class="calendar-events__column">
+							<div class="calendar-events__name">
+								{{appointment.name}}
+							</div>
+							<div class="calendar-events__time">
+								{{appointment.phone}}
+							</div>
+						</div>
+					</div>
 					</div>
 				</div>
 			</span>

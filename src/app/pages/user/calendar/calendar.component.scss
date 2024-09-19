@@ -8,13 +8,15 @@
         display: flex;
         position: relative;
     }
+    &__stard-day{
+        text-align: center;
+    }
     &__day{
         flex: 1;
         background: var(--c-calendar);
-        margin: 4px;
-        padding: 15px;
-        border-radius: 10px;
-        text-align: center;
+        padding: 10px 5px;
+        border-radius: 0;
+        border: 1px solid var(--border);
         font-weight: 900;
         display: flex;
         flex-flow: column wrap;
@@ -23,6 +25,7 @@
             font-size: 12px;
             font-weight: 700;
             padding-bottom: 3px;
+            text-align: center;
         }
     }
     &__week{
@@ -44,6 +47,7 @@
         color: var(--c-primary);
         line-height: 1;
         justify-content: center;
+        font-weight: 300;
         &__clock{
             display: flex;
             margin-right: 7px;
@@ -61,11 +65,22 @@
         font-weight: 500;
         color: #ffffff;
         padding: 5px;
-        display: flex;
-        justify-content: space-between;
         margin-bottom: 5px;
         &__text{
             font-weight: 900;
+        }
+        &__column{
+            margin-right: 20px;
+        }
+        &__row{
+            display: flex;
+            border-bottom: 1px solid #fff;
+            &:last-child{
+                border: none;
+            }
+        }
+        &__name{
+            color: var(--c-primary);
         }
     }
 }
@@ -123,20 +138,22 @@
 .event{
     &__item{
         display: flex;
-        border-bottom: 1px solid #ffffff59;
+        border-bottom: 1px solid var(--day-name);
         margin-bottom: 10px;
     }
     &__icon{
         margin-right: 10px;
     }
     &-text{
+        &__left{
+            display: flex;
+        }
         &__title{
             font-weight: 700;
         }
         &__row{
             display: flex;
             padding-bottom: 5px;
-            border-bottom: 1px solid var(--c-text-primary);
         }
         &__column{
             margin-right: 20px;
@@ -146,17 +163,20 @@
             }
             &-time{
                 font-size: 14px;
+                color: var(--day-name);
             }
         }
     }
     &-driver{
+        border-left: 1px solid var(--day-name);
+        padding-left: 10px;
         &__name{
             color: var(--c-primary);
             font-weight: 900;
-            padding-top: 5px;
         }
         &__phone{
             font-size: 14px;
+            color: var(--day-name);
         }
     }
     

@@ -83,9 +83,10 @@
         --b-radius-btn: 10px;
         --transition: all .3s;
         --events: #4c8e9d;
+        --border: rgba(102, 91, 91, 0.432);
     }
 
-    html.dark:root {
+    html.dark:root {   
 		--c-white: #fff;
         --c-basic: #333;
         --c-bg-primary: #282828;
@@ -99,4 +100,5 @@
         --c-calendar: #141414;
         --day-name: #dad5d5;
         --events: #1c2e32;  
+        --border: rgb(255 255 255 / 23%);
     }
