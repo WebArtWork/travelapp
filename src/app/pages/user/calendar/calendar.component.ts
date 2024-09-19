@@ -7,6 +7,7 @@ import { TranslateService } from '../../../modules/translate/translate.service';
 import { FormService } from '../../../modules/form/form.service';
 import { FormInterface } from '../../../modules/form/interfaces/form.interface';
 import { AlertService } from '../../../modules/alert/alert.service';
+import { Router } from '@angular/router';
 
 @Component({
 	templateUrl: './calendar.component.html',
@@ -36,11 +37,13 @@ export class CalendarComponent {
 		10: 'Листопад',
 		11: 'Грудень'
 	};
+	manager = this._router.url.includes('manager');
 	constructor(
 		private _tas: TravelappointmentService,
 		private _translate: TranslateService,
 		private _alert: AlertService,
-		private _form: FormService
+		private _form: FormService,
+		private _router: Router
 	) {
 		this._onMonthChange();
 
@@ -363,7 +366,13 @@ export class CalendarComponent {
 
 		this.keepDays = (daysInMonth + this.skipDays) % 7;
 
-		this.selectedDate = '';
+		if (
+			!this.selectedDate ||
+			this.selectedDate.split('.')[0] !== this.currentYear.toString() ||
+			this.selectedDate.split('.')[1] !==
+				(this.currentMonth - 1).toString()
+		)
+			this.selectedDate = '';
 	}
 	isMobile: boolean;
 	@HostListener('window:resize') onResize(): void {
@@ -372,10 +381,12 @@ export class CalendarComponent {
 	date(year: number, month: number, day: number, join = '.'): string {
 		return `${year}${join}${month}${join}${day}`;
 	}
-	selectedDate: string;
+	selectedDate: string = localStorage.getItem('travel_selectedDate') || '';
 	dateClicked(date: string): void {
 		if (this.isMobile) {
 			this.selectedDate = date;
+
+			localStorage.setItem('travel_selectedDate', date);
 		} else {
 			this.createAppointment(date);
 		}

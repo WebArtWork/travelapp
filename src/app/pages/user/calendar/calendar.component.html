@@ -178,49 +178,53 @@
 		</div>
 		<div class="event-text">
 			<div class="event-text event-text__left">
-
 				<div class="event-text__row">
-					<div class="event-text__column">
+					<a
+						[href]="appointment.fromHref || 'javascript:void(0)'"
+						(click)="
+							$event.stopPropagation();
+							appointment.fromHref || $event.preventDefault()
+						"
+						target="_blank"
+						class="event-text__column"
+					>
 						<div class="event-text__column-from">
 							{{appointment.from}}
 						</div>
 						<div class="event-text__column-time">
 							{{appointment.fromTime}}
 						</div>
-					</div>
-					<div class="event-text__column">
+					</a>
+					<a
+						[href]="appointment.toHref || 'javascript:void(0)'"
+						(click)="
+							$event.stopPropagation();
+							appointment.toHref || $event.preventDefault()
+						"
+						target="_blank"
+						class="event-text__column"
+					>
 						<div class="event-text__column-from">
 							{{appointment.to}}
 						</div>
 						<div class="event-text__column-time">
 							{{appointment.toTime}}
 						</div>
-					</div>
+					</a>
 				</div>
-				<div class="event-driver">
-					<div class="event-driver__name">
-						{{appointment.name}}
-					</div>
-					<div class="event-driver__phone">
-						{{appointment.phone}}
-					</div>
-				</div>
-				<!--
-					<span class="event-text__title"
-				>{{appointment.from}} - {{appointment.to}}</span
-			>
-				<div class="event-text__right">
-					<div class="event-text__time">{{appointment.fromTime}}</div>
-				</div>
-				-->
-
+				<a
+					(click)="$event.stopPropagation()"
+					href="tel:{{appointment.phone}}"
+					class="event-driver"
+				>
+					<div class="event-driver__name">{{appointment.name}}</div>
+					<div class="event-driver__phone">{{appointment.phone}}</div>
+				</a>
 			</div>
-
-			
 		</div>
 	</div>
 
 	<button class="add-event-mobile" (click)="createAppointment(selectedDate)">
-		+ ADD NEW EVENT
+		+ ADD NEW TRAVEL
 	</button>
 </div>

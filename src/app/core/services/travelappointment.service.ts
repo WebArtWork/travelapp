@@ -48,7 +48,8 @@ export class TravelappointmentService extends CrudService<Travelappointment> {
 
 		this.get().subscribe((travelappointments: Travelappointment[]) => {
 			this.travelappointments.push(...travelappointments);
-			travelappointments.forEach((ap) => {
+
+			travelappointments.forEach((ap): void => {
 				const date = this.date(ap);
 
 				this.travelappointmentsByDate[date] =
